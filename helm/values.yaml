@@ -10,7 +10,7 @@ env:
   PORT: "3000"
   DATABASE_URL: "postgresql://postgres:GENERATED-PASSWORD@niceye-ik-test-postgresql:5432/niceye_ik"
   NEXTAUTH_SECRET: "TODO-DEVOPS-SET-SECRET"
-  NEXTAUTH_URL: "https://ik-test.niceye.com"
+  NEXTAUTH_URL: "https://test-izin-sistemi.niceye.com"
   SMTP_HOST: "TODO-DEVOPS-SET-SMTP"
   SMTP_PORT: "587"
   SMTP_USER: "TODO-DEVOPS-SET-USER"
@@ -30,14 +30,14 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
   hosts:
-    - host: ik-test.niceye.com
+    - host: test-izin-sistemi.niceye.com
       paths:
         - path: /
           pathType: Prefix
   tls:
-  - secretName: ik-test.niceye.com
+  - secretName: test-izin-sistemi.niceye.com
     hosts:
-    - ik-test.niceye.com
+    - test-izin-sistemi.niceye.com
 
 resources: 
   limits:
@@ -72,3 +72,9 @@ serviceAccount:
 
 autoscaling:
   enabled: false
+
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClassName: "gp3"
+

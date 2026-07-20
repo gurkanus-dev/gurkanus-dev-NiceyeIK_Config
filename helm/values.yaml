@@ -1,0 +1,74 @@
+replicaCount: 1
+
+image:
+  repository: 799121415609.dkr.ecr.eu-central-1.amazonaws.com/NiceyeIK
+  pullPolicy: IfNotPresent
+  tag: "latest"  # This gets replaced by buildspec.yml
+
+env:
+  NODE_ENV: production
+  PORT: "3000"
+  DATABASE_URL: "postgresql://postgres:GENERATED-PASSWORD@niceye-ik-test-postgresql:5432/niceye_ik"
+  NEXTAUTH_SECRET: "TODO-DEVOPS-SET-SECRET"
+  NEXTAUTH_URL: "https://ik-test.niceye.com"
+  SMTP_HOST: "TODO-DEVOPS-SET-SMTP"
+  SMTP_PORT: "587"
+  SMTP_USER: "TODO-DEVOPS-SET-USER"
+  SMTP_PASS: "TODO-DEVOPS-SET-PASS"
+  SMTP_FROM: "noreply@niceye.com"
+
+service:
+  type: NodePort
+  port: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+  hosts:
+    - host: ik-test.niceye.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+  - secretName: ik-test.niceye.com
+    hosts:
+    - ik-test.niceye.com
+
+resources: 
+  limits:
+    memory: 1024Mi
+  requests:
+    cpu: 20m
+    memory: 256Mi
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "GENERATED-PASSWORD"
+    database: niceye_ik
+  primary: 
+    resources: 
+      requests:
+        cpu: 20m
+        memory: 128Mi
+      limits:
+        memory: 1024Mi
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    registry: "799121415609.dkr.ecr.eu-central-1.amazonaws.com"
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+autoscaling:
+  enabled: false

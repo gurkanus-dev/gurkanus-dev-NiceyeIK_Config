@@ -1,16 +1,20 @@
 replicaCount: 1
 
 image:
-  repository: 799121415609.dkr.ecr.eu-central-1.amazonaws.com/NiceyeIK
+  repository: 799121415609.dkr.ecr.eu-central-1.amazonaws.com/niceye-hrportal
   pullPolicy: IfNotPresent
   tag: "+tag+"  # This gets replaced by buildspec.yml
 
 env:
   NODE_ENV: production
   PORT: "3000"
-  DATABASE_URL: "postgresql://postgres:GENERATED-PASSWORD@niceye-ik-test-postgresql:5432/niceye_ik"
-  NEXTAUTH_SECRET: "TODO-DEVOPS-SET-SECRET"
-  NEXTAUTH_URL: "https://test-izin-sistemi.niceye.com"
+  TZ: Europe/Istanbul
+  DATABASE_URL: "postgresql://niceye-hrportal:Kjcv45u*BnCn*t@postgres-shared-rw.cnpg.svc.cluster.local:5432/niceye-hrportal"
+  NEXTAUTH_SECRET: "e0cfaf30eb2540a179b5d2486234059f20feb827158467ea6735156e2ba08b94"
+  NEXTAUTH_URL: "https://hrportal.niceye.com"
+  AZURE_AD_CLIENT_ID: "TODO-DEVOPS-SET-AZURE-AD-CLIENT-ID"
+  AZURE_AD_CLIENT_SECRET: "TODO-DEVOPS-SET-AZURE-AD-CLIENT-SECRET"
+  AZURE_AD_TENANT_ID: "TODO-DEVOPS-SET-AZURE-AD-TENANT-ID"
   SMTP_HOST: "TODO-DEVOPS-SET-SMTP"
   SMTP_PORT: "587"
   SMTP_USER: "TODO-DEVOPS-SET-USER"
@@ -30,39 +34,21 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
   hosts:
-    - host: test-izin-sistemi.niceye.com
+    - host: hrportal.niceye.com
       paths:
         - path: /
           pathType: Prefix
   tls:
-  - secretName: test-izin-sistemi.niceye.com
+  - secretName: hrportal.niceye.com
     hosts:
-    - test-izin-sistemi.niceye.com
+    - hrportal.niceye.com
 
-resources: 
+resources:
   limits:
     memory: 1024Mi
   requests:
     cpu: 20m
     memory: 256Mi
-
-postgresql:
-  enabled: true
-  auth:
-    postgresPassword: "GENERATED-PASSWORD"
-    database: niceye_ik
-  primary: 
-    resources: 
-      requests:
-        cpu: 20m
-        memory: 128Mi
-      limits:
-        memory: 1024Mi
-  global:
-    security:
-      allowInsecureImages: true
-  image:
-    registry: "799121415609.dkr.ecr.eu-central-1.amazonaws.com"
 
 serviceAccount:
   create: true
@@ -77,4 +63,3 @@ persistence:
   enabled: true
   size: 5Gi
   storageClassName: "gp3"
-

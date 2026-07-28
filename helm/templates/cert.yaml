@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hrportal.niceye.com
+spec:
+  secretName: hrportal.niceye.com
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: hrportal.niceye.com
+  dnsNames:
+    - hrportal.niceye.com

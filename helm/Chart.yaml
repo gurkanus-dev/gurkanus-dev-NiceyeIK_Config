@@ -1,6 +1,6 @@
 apiVersion: v2
-name: niceye-ik
-description: NicEye İK Portal — Helm Chart
+name: niceye-hrportal
+description: NicEye HR Portal Helm Chart
 type: application
 version: 1.0.0
 appVersion: "1.0.0"

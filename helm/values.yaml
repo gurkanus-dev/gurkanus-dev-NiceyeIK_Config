@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: 799121415609.dkr.ecr.eu-central-1.amazonaws.com/niceye-hrportal
   pullPolicy: IfNotPresent
-  tag: "d48439a"  # This gets replaced by buildspec.yml
+  tag: "2dca256"  # This gets replaced by buildspec.yml
 
 env:
   NODE_ENV: production
